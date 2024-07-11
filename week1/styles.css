@@ -1,0 +1,86 @@
+table {
+        border: 1px solid black;
+        border-collapse: collapse;
+}
+
+/* you can stlye multiple elements at the same time*/
+td, th {
+    border: 1px solid black;
+    padding: 2px;
+}
+/* 
+ id selector -> #<id_name>
+ class selector -> .<class_name>
+  If there are conflicting styles specifications then CSS has a specificity order that goes:
+1. In-line styling
+2. id
+3. class
+4. element type
+*/
+
+/* Descent selector
+only apply styling to list items found within an unordered list: */
+ul li {
+    color: blue;
+}
+/* Attributes as selector 
+only elements that have that attribute*/
+a[href="https://www.amazon.com/"] {
+    color: red;
+}
+/* CSS pseudoclass
+styling during special circumstances */
+button {
+    width: 200px;
+    height: 50px;
+    font-size: 24px;
+}
+button:hover {
+    background-color: aqua;;
+}
+
+/* media queries 
+medi queries are ways to changing the style of a page based on how the page is being viewed.*/
+@media (min-width: 600px) {
+    body {
+        background-color: blue;
+    }
+}
+@media (max-width: 599px) {
+    body {
+        background-color: blueviolet;
+    }
+}
+
+/* flexbox 
+wrapping elements when they don't fit horizontally */ 
+#container {
+    display: flex;
+    flex-wrap: wrap;
+}  
+/* ">" indicate immediate children
+descendant selector specify all children(grand etc) */
+#container > div {
+    background-color: green;
+    font-size: 20px;
+    margin: 20px;
+    padding: 20px;
+    width: 200px;
+}
+
+/* grid */
+.grid {
+    background-color: green;
+    display: grid;
+    padding: 20px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-columns: 200px 200px auto;
+}
+
+.grid-item {
+    background-color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+}

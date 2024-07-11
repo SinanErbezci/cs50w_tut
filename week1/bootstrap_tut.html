@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bootstrap tuto</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <style>
+            .row > div {
+                padding: 20px;
+                background-color: teal;
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- bootstrap automatically divides page to 12 columns. 
+        We can specify how much one column takes spaces by col-x. "x" specify amount of column -->
+        <div class="container">
+            <!-- same size columns with width of 4 -->
+            <div class="row">
+                <div class="col-4">
+                    This is a section.
+                </div>
+                <div class="col-4">
+                    This is another section.
+                </div>
+                <div class="col-4">
+                    This is a third section.
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="container">
+            <!-- center one is larger -->
+            <div class="row">
+                <div class="col-3">
+                    This is a section.
+                </div>
+                <div class="col-6">
+                    This is another section.
+                </div>
+                <div class="col-3">
+                    This is a third section.
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <!-- col-lg-x means when screen is large it should take 3. col-sm-x means when screen is small... -->
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    This is a section.
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    This is another section.
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    This is a third section.
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    This is a fourth section.
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
