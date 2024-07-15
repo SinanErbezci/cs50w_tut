@@ -1,9 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
-    </head>
+        <title>Search</title>
+        <link rel="stylesheet" href="styles.css">
+     </head>
     <body>
-        <p>for images</p>
+        <div class="nav" style="justify-content: right;">
+            <div class="right-container">
+                <a href="./index.html">Main</a>
+                <a href="./advanced.html">Advanced</a>
+            </div>
+        </div>
+        <div id="logo">
+            <img id="logo-img" src="./images/google_logo.png" alt="google_logo" style="width:360px;height:auto;">
+        </div>
+        <div class="container" style="text-align: center;">
+            <form  action="https://www.google.com/search">
+            <input autofocus type="search" name="q">
+            <input type="hidden" name="sclient" value="img">
+            <input type="hidden" name="udm" value="2">
+            <div class="submits"> 
+                <input type="submit" value="Image Search">
+            </div>
+        </form>
+        </div>
     </body>
 </html>

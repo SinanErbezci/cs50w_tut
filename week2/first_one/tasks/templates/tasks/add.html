@@ -1,0 +1,14 @@
+{% extends "tasks/layout.html" %}
+
+{% block body %}
+    <h1>Add Task</h1>
+    <ul>
+        <form action="{% url 'tasks:add' %}" method="post">
+            <!-- CSRF token = for safety. It's already built in Django-->
+            {% csrf_token %}
+            <input type="text" name="task">
+            <input type="submit">
+        </form>
+    </ul>
+    <a href="{% url 'tasks:index' %}">Index</a>
+{% endblock %}

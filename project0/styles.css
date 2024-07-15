@@ -8,26 +8,41 @@ body {
     margin-bottom: 20px;
     
 }   
-#nav {
-    text-align: right;
+.nav {
+    display: flex;
+    justify-content: space-between;
     margin-top: 20px;
     margin-bottom: 30px;
-    border-bottom: medium solid azure;
+    border-bottom: medium solid black;
     padding-bottom: 10px;
     opacity: 0.87;
 }
-#nav > a {
-    margin-bottom: 45px;
+.nav a {
     font-weight: 600;
     font-size: larger;
-    margin-right: 1%;
+    margin-right: 2%;
     font-size:x-large;
+    color:#FFFFFF;
+    text-decoration: none;
 }
-#search {
-    text-align: center;
-    margin-bottom: 10px;
+.container {
+    display: block;
 }
-input[name="q"] {
+.left-container {
+    display: flex;
+    align-items: left;
+    justify-content: center;
+    margin-left: 2%;
+}
+.right-container{
+    display: flex;
+    align-items: right;
+    justify-content: center;
+    column-gap: 30px;
+    margin-right: 10px;
+}
+
+input[type="search"] {
     margin-top: 10px;
     width: 40%;
     padding: 14px 8px;
@@ -40,12 +55,13 @@ input[name="q"] {
     background: transparent url("./images/search.svg") no-repeat 13px;
     text-indent: 40px;
 }
-#submits {
+.submits {
     margin-top: 20px;
+    text-align: center;
 }
 
 input[type="submit"]{
-    width: 8%;
+    width: 10%;
     height: 10%;
     font-size: medium;
     padding: 10px 10px;
@@ -61,12 +77,7 @@ input[type="search"]::-webkit-search-cancel-button {
     cursor: pointer;
 }
 
-#nav > a {
-    color:#FFFFFF;
-    text-decoration: none;
-}
-
-#nav > a:hover {
+.nav a:hover {
     color:#bbb;
     text-decoration: none;
 }
@@ -74,4 +85,24 @@ input[type="submit"]:hover{
     background-color: #2d2d2d;
     color:#FFFFFF;
     border: thin solid #2d2d2d ;
+}
+
+.title {
+    margin-left: 2%;
+    color: rgba(255, 0, 0, 0.573);
+    font-weight: 50;
+}
+.search-bar {
+    display:flex;
+    margin-left: 2%;
+    justify-content:space-between;
+    margin-right: 20%;
+}
+
+input[id="search-long"] {
+    width: 70%;
+}
+
+#advanced-btn {
+    background-color:rgb(66, 128, 204);
 }
