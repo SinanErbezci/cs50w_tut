@@ -1,0 +1,54 @@
+CREATE TABLE flights (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    origin TEXT NOT NULL,
+    destination TEXT NOT NULL,
+    duration INTEGER NOT NULL
+);
+
+INSERT INTO flights 
+    (origin, destination, duration)
+    VALUES ("New York", "London", 415);
+
+SELECT * FROM flights;
+
+SELECT origin, destination FROM flights;
+
+SELECT * FROM flights WHERE id = 3;
+
+.tables - .schema
+.mode columns - .headers yes
+
+SELECT * FROM flights WHERE duration > 500;
+
+SELECT * FROM flights WHERE duration > 500 
+    AND destination= "Paris";
+
+SELECT * FROM flights WHERE 
+    origin IN ("New York", "Lima");
+
+SELECT * FROM flights WHERE
+    origin LIKE "%a%";
+
+UPDATE flights
+    SET duration = 430
+    WHERE origin = "New York"
+    AND destination = "London";
+
+DELETE FROM flights WHERE destination = "Tokyo";
+
+-- To run sql script
+sqlite3 <database_name> < <script_name>
+
+SELECT first, origin, destination
+    FROM flights JOIN passengers
+    ON passengers.flight_id = flights.id;
+
+-- outer joins. When some data doesnt match with eacother but
+-- you want to still select them.
+
+CREATE INDEX name_index ON passengers (last);
+
+-- SQL injection attacks
+"hacker"--" -> can comment other part.
+-- Race Conditions
+doing queries on different threads at the same time.
