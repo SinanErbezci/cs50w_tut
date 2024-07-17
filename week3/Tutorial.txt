@@ -52,3 +52,18 @@ CREATE INDEX name_index ON passengers (last);
 "hacker"--" -> can comment other part.
 -- Race Conditions
 doing queries on different threads at the same time.
+
+-------- Django Shell
+python3 manage.py shell # Django shell
+from flight.models import flight
+f = Flight(origin="New York", destination="London", duration=415)
+f.save()
+Flight.objects.all()
+Flight.objects.filter(city="New York")
+jfk = Airport.objects.get(city="New York")
+flight = flights.first()
+print(flight.id)
+flights.delete()
+------ Django Admin App
+# To create it
+python manage.py createsuperuser
