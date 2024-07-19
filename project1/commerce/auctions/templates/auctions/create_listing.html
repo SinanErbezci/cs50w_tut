@@ -3,10 +3,41 @@
 {% block body %}
     <h2>Create listing</h2>
 
-    <form action="{% url 'create_listing' %}" method="post">
-        <div class="form-group">
-            <label for="desc">Description</label>
-            <textarea  id="desc" placeholder="Please describe your item" rows="4" cols="40" maxlength="256"></textarea> 
+    {% if message %}
+        <div class="alert alert-danger" role="alert">
+            {{message}}
         </div>
+    {% endif %}
+    <form action="{% url 'create_listing' %}" method="post">
+        {% csrf_token %}
+        <label for="desc">Description</label>
+        <div class="form-group">
+            <textarea class="form-control" id="desc" placeholder="Please describe your item" name="description" style="width: 60%;" maxlength="256"></textarea> 
+        </div>
+        <label for="category">Category</label>
+        <div class="form-group">
+            <select class="custom-select" id="category" name="category" style="width: 30%;">
+                <option selected disabled >Choose a category </option>
+                {% for key, value in category_dict.items %}
+                    <option value="{{key}}">{{value}}</option>
+                {% endfor %}
+            </select>              
+        </div>
+        <label for="price">Price</label>
+        <div class="input-group mb-3 w-25">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$</span>
+            </div>
+            <input type="number" class="form-control" id="price" name="price-1">
+            <div class="input-group-append">
+                <span class="input-group-text">.</span>
+                <input type="number" class="form-control" name="price-2" style="width: 30%;"  maxlength="2" value="00" max="99">
+            </div>
+        </div>
+        <label for="image">Image URL (Can be left blank)</label>
+        <div class="form-group w-25">
+            <input type="text" class="form-control" name="url" placeholder="Enter URL for image"> 
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 {% endblock %}
