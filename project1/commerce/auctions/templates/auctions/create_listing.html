@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Create listing</h2>
+
+    <form action="{% url 'create_listing' %}" method="post">
+        <div class="form-group">
+            <label for="desc">Description</label>
+            <textarea  id="desc" placeholder="Please describe your item" rows="4" cols="40" maxlength="256"></textarea> 
+        </div>
+    </form>
+{% endblock %}
