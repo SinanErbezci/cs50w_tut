@@ -16,6 +16,7 @@ class Auctions(models.Model):
         HOME: "Home",
         ELSE: "Everything Else",
     }
+    title = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
     image = models.URLField()
     price = models.DecimalField(max_digits=12, decimal_places=2)

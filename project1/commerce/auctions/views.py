@@ -1,14 +1,16 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from .models import User, Auctions
+from django.contrib import messages
 
 
-def index(request):
+
+def index(request,):
     return render(request, "auctions/index.html")
 
 
@@ -66,37 +68,45 @@ def register(request):
 def create_listing(request):
     
     category_dict = Auctions.CATEGORY_CHOICES
-    message = ""
+    error = ""
+
     if request.method == "POST":
-        desc = request.POST.get("description",False)
-        category = request.POST.get("category", False)
-        url = request.POST.get("url",False)
+        title = request.POST.get("title", "")
+        desc = request.POST.get("description","")
+        category = request.POST.get("category", "")
+        url = request.POST.get("url","")
         price1 = request.POST.get("price-1",False)
-        price2 = request.POST.get("price-2")
-        print(category)
-        if not desc:
-            message = "Please Enter description"
-        elif not category:
-            message = "Please Select category"
-        elif not price1 or not price1.isdigit():
-            message = "Please Enter Price"
-        elif url:
-            validate = URLValidator()
+        price2 = request.POST.get("price-2",0)
+        validate = URLValidator()
+        if url:
             try:
                 validate(url)
             except ValidationError as e:
-                message = e.message
+                error = e.message
+
+        if not desc:
+            error = "Please Enter description"
+        elif not category:
+            error = "Please Select category"
+        elif not price1 or not price1.isdigit():
+            error = "Please Enter Price"
+        elif not title:
+            error ="Please Enter Title"
         
-        price = int(price1) + (int(price2)/100.0)
-        new_item = Auctions.objects.create(
-            description=desc, category=category, image=url, price=price
-            )
-        new_item.save()
-        print(price)
-        return render(request, "auctions/create_listing.html", {
+        if error:
+            return render(request, "auctions/create_listing.html", {
             "category_dict": category_dict,
-            "message": message
+            "error": error
             })
+        else:
+            messages.success(request, "You've successfully created a listing")
+            price = int(price1) + (int(price2)/100.0)
+            new_item = Auctions.objects.create(
+                description=desc, category=category, image=url, price=price, title=title
+                )
+            new_item.save()
+            return redirect("index")
+
 
     return render(request, "auctions/create_listing.html", {
         "category_dict": category_dict

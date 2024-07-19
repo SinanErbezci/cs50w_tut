@@ -3,16 +3,20 @@
 {% block body %}
     <h2>Create listing</h2>
 
-    {% if message %}
+    {% if error %}
         <div class="alert alert-danger" role="alert">
-            {{message}}
+            {{error}}
         </div>
     {% endif %}
     <form action="{% url 'create_listing' %}" method="post">
         {% csrf_token %}
+        <label for="title">Title of the Listing</label>
+        <div class="form-group w-50">
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter the title" required>
+        </div> 
         <label for="desc">Description</label>
-        <div class="form-group">
-            <textarea class="form-control" id="desc" placeholder="Please describe your item" name="description" style="width: 60%;" maxlength="256"></textarea> 
+        <div class="form-group w-50">
+            <textarea class="form-control" id="desc" placeholder="Please describe your item" name="description"  maxlength="256"></textarea> 
         </div>
         <label for="category">Category</label>
         <div class="form-group">
