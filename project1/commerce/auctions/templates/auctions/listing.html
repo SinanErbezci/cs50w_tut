@@ -1,0 +1,16 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+            <img src="{% static 'auctions/card-image.svg' %}" class="img-fluid" alt="W3Schools.com" style="width:240px;height:auto;">
+            </div>
+            <div class="col-8">
+            <h2>{{item.title}} </h2>
+            <h2>{{item.price}} </h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}

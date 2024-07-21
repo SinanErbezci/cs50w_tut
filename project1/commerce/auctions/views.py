@@ -7,12 +7,15 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from .models import User, Auctions
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 
-def index(request,):
-    return render(request, "auctions/index.html")
-
+def index(request):
+    items = Auctions.objects.filter(active=True)
+    return render(request, "auctions/index.html", {
+            "items":items
+        })
 
 def login_view(request):
     if request.method == "POST":
@@ -65,8 +68,12 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
 
+
 def create_listing(request):
-    
+    if not request.user.is_authenticated:
+        messages.warning(request, "Please Login First")
+        return redirect("login")
+
     category_dict = Auctions.CATEGORY_CHOICES
     error = ""
 
@@ -111,3 +118,13 @@ def create_listing(request):
     return render(request, "auctions/create_listing.html", {
         "category_dict": category_dict
     })
+
+def listing(request,item_id):
+    item = Auctions.objects.get(pk = item_id)
+    if item:
+        return render(request, "auctions/listing.html", {
+            "item":item
+        })
+    else:
+        messages.warning(request, "Item is not active or not found")
+        return redirect("index")

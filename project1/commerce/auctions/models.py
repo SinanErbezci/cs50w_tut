@@ -18,9 +18,11 @@ class Auctions(models.Model):
     }
     title = models.CharField(max_length=64)
     description = models.CharField(max_length=256)
-    image = models.URLField()
+    image = models.URLField(default='',blank=True)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ELSE)
+    active = models.BooleanField(default=True)
+    created_time = models.DateTimeField(auto_now_add=True)
     
 class Comments(models.Model):
     message = models.CharField(max_length=256)

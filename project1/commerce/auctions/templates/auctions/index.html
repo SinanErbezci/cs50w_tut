@@ -8,6 +8,11 @@
     {% endfor %}
 {% endif %}
     <h2>Active Listings</h2>
-
-    TODO
+{% if items %}
+    {% for item in items %}
+    <h3>{{item.title}} {{item.price}}</h3>
+    {% endfor %}
+{% else %}
+    <h3> No item avaible</h3>
+{% endif %}
 {% endblock %}
