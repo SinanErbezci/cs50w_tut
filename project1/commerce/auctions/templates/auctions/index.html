@@ -1,5 +1,4 @@
 {% extends "auctions/layout.html" %}
-
 {% block body %}
 
 {% if messages %}
@@ -10,7 +9,22 @@
     <h2>Active Listings</h2>
 {% if items %}
     {% for item in items %}
-    <h3>{{item.title}} {{item.price}}</h3>
+    <div class="container-fluid border-bottom">
+        <div class="row">
+            <div class="col-4 align-self-center">
+            <img src="{{item.image}}    " class="img-fluid" alt="W3Schools.com" onerror="this.onerror=null;this.src='{{img_url}}';" style="width:240px;height:auto;">
+            </div>
+            <div class="col-8 align-self-center">
+            <h3>Name: {{item.title}} </h2>
+            <h3>Category: {{item.category}}</h2>
+            {% if item.description %}
+                <h3>Description: {{item.description}}</h2>
+            {% endif %}
+            <h3>Price: {{item.price}} </h2>
+            <h3>Createad at: {{item.created_time}}</h2>
+            </div>
+        </div>
+    </div> 
     {% endfor %}
 {% else %}
     <h3> No item avaible</h3>

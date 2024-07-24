@@ -6,3 +6,7 @@ img {
     width: 360px;
     height: auto;
 }
+
+.active {
+    background-color: red;
+}

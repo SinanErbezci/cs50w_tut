@@ -1,16 +1,77 @@
 {% extends "auctions/layout.html" %}
-{% load static %}
+
+{% block script %}
+    <script>
+        var offImg = "{{watch_url}}"
+        var onImg = "{{watched_url}}"
+    </script>
+{% endblock %}
+
 
 {% block body %}
-    <div class="container-fluid">
+    {% if item %}
+    <div class="container-fluid border-bottom">
         <div class="row">
-            <div class="col-4">
-            <img src="{% static 'auctions/card-image.svg' %}" class="img-fluid" alt="W3Schools.com" style="width:240px;height:auto;">
+            <div class="col-md-auto">
+                <img src="{{item.image}}" class="img-fluid" alt="W3Schools.com" onerror="this.onerror=null;this.src='{{img_url}}';" style="width:240px;height:auto;">
             </div>
-            <div class="col-8">
-            <h2>{{item.title}} </h2>
-            <h2>{{item.price}} </h2>
+            {% if request.user.is_authenticated %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="col-md-auto">
+                <button class="btn btn-default" data-toggle="button">
+                    {% if watched %}
+                <img src="{{watch_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
+                    {% else %}
+                    <img src="{{watched_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
+                    {% endif %}
+                </button>
+            </div>
+            </form>
+            {% endif %}
+            <div class="col-6 align-self-center">
+            <h3>Name: {{item.title}} </h2>
+            <h3>Category: {{item.category}}</h2>
+            {% if item.description %}
+                <h3>Description: {{item.description}}</h2>
+            {% endif %}
+            <h3>Price: {{item.price}} </h2>
+            <h3>Createad at: {{item.created_time}}</h2>
             </div>
         </div>
     </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="container-fluid">
+            <p>Current bid(s)</p>
+            </div>
+    {% if request.user.is_authenticated %}
+    <div class="container-fluid">
+    <label for="bid">Bid for item</label>   
+    </div>
+
+            <div class="input-group mb-3 w-25">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+            <input type="number" class="form-control" id="bid" name="bid" placeholder="Bid">
+            <div class="input-group-append">
+                <input type="submit" class="btn btn-primary">
+            </div>
+    {% endif %}
+        </div>
+    </div>
+    <h2>Comments</h2>
+    {% if comments %}
+    {% endif %}
+    {% if request.user.is_authenticated %}
+    <div class="form-group w-50">
+        <label for="comment">Add comment</label>
+        <textarea class="form-control mb-3" id="comment" rows="3"></textarea>
+        <input type="submit" class="btn btn-primary">
+      </div>
+    {% endif %}
+    {% else %}
+        <h2> There are currently no items available</h2>
+    {% endif %}
 {% endblock %}

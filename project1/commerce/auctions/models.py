@@ -17,12 +17,13 @@ class Auctions(models.Model):
         ELSE: "Everything Else",
     }
     title = models.CharField(max_length=64)
-    description = models.CharField(max_length=256)
+    description = models.CharField(max_length=256,default='', blank=True)
     image = models.URLField(default='',blank=True)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ELSE)
     active = models.BooleanField(default=True)
     created_time = models.DateTimeField(auto_now_add=True)
+    watchlist = models.ManyToManyField(User, related_name="watchlist")
     
 class Comments(models.Model):
     message = models.CharField(max_length=256)

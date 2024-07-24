@@ -8,13 +8,15 @@ from django.core.exceptions import ValidationError
 from .models import User, Auctions
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
-
+from django.templatetags.static import static
 
 def index(request):
     items = Auctions.objects.filter(active=True)
+    img_url = static('auctions/card-image.svg')
+    print(img_url)
     return render(request, "auctions/index.html", {
-            "items":items
+            "items":items,
+            "img_url":img_url   
         })
 
 def login_view(request):
@@ -120,11 +122,33 @@ def create_listing(request):
     })
 
 def listing(request,item_id):
+    if request.method == "POST":
+        item = Auctions.objects.get(pk = item_id)
+        if ( item.watchlist.filter(pk=request.user.id)):
+            item.watchlist.remove(request.user.id)
+            item.save()
+        else:
+            item.watchlist.set([request.user.id]) 
+            item.save()
+
     item = Auctions.objects.get(pk = item_id)
+    if item.watchlist.filter(pk=request.user.id):
+        watched = True
+    else:
+        watched = False
+    img_url = static('auctions/card-image.svg')
+    watch_url = static('auctions/add.svg')
+    watched_url = static('auctions/add_fill.svg')
+    
     if item:
         return render(request, "auctions/listing.html", {
-            "item":item
+            "item":item,
+            "img_url":img_url,
+            "watch_url":watch_url,
+            "watched_url":watched_url,
+            "watched":watched
         })
     else:
         messages.warning(request, "Item is not active or not found")
         return redirect("index")
+    
