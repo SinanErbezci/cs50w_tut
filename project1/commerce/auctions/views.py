@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import User, Auctions
+from .models import User, Auctions, Comments
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
@@ -123,15 +123,29 @@ def create_listing(request):
 
 def listing(request,item_id):
     if request.method == "POST":
-        item = Auctions.objects.get(pk = item_id)
-        if ( item.watchlist.filter(pk=request.user.id)):
-            item.watchlist.remove(request.user.id)
-            item.save()
-        else:
-            item.watchlist.set([request.user.id]) 
-            item.save()
-
+        if request.POST.get("watch",""):
+            item = Auctions.objects.get(pk = item_id)
+            if ( item.watchlist.filter(pk=request.user.id)):
+                item.watchlist.remove(request.user.id)
+                item.save()
+                messages.success(request, "You've successfully removed from your watchlist")
+            else:
+                item.watchlist.set([request.user.id]) 
+                item.save()
+                messages.success(request, "You've successfully added to your watchlist")
+            return redirect("listing", item_id=item_id)
+        elif request.POST.get("comment",""):
+            user = User.objects.get(pk=request.user.id)
+            item = Auctions.objects.get(pk=item_id)
+            new_item = Comments.objects.create(
+                message=request.POST["comment"], user=user, item=item
+            )
+            new_item.save()
+            messages.success(request, "You've successfully commented")
+            return redirect("listing", item_id=item_id)
+    
     item = Auctions.objects.get(pk = item_id)
+    comments = Comments.objects.all().filter(item=item).order_by("enter_time")
     if item.watchlist.filter(pk=request.user.id):
         watched = True
     else:
@@ -139,16 +153,36 @@ def listing(request,item_id):
     img_url = static('auctions/card-image.svg')
     watch_url = static('auctions/add.svg')
     watched_url = static('auctions/add_fill.svg')
-    
     if item:
         return render(request, "auctions/listing.html", {
             "item":item,
             "img_url":img_url,
             "watch_url":watch_url,
             "watched_url":watched_url,
-            "watched":watched
+            "watched":watched,
+            "comments": comments
         })
     else:
         messages.warning(request, "Item is not active or not found")
         return redirect("index")
     
+@login_required
+def watchlist(request):
+    items = Auctions.objects.filter(watchlist__id=request.user.id)
+    print(items)
+    return render(request, "auctions/watchlist.html", {
+        "items":items
+    })
+
+def categories(request):
+    category_dict = Auctions.CATEGORY_CHOICES
+    items = ""
+    category = request.GET.get('category', "")
+    img_url = static('auctions/card-image.svg')
+    if category:
+        items = Auctions.objects.all().filter(category=category)
+    return render(request, "auctions/categories.html", {
+        "categories":category_dict,
+        "items": items,
+        "img_url": img_url
+    })

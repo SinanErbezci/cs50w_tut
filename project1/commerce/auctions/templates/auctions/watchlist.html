@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Items in your watchlist:</h2>
+    <div class="list-group w-25" id="watchlist">
+        {% for item in items %}
+        <a href="{% url 'listing' item.id %}" class="list-group-item list-group-item-action" style="font-weight:700;font-size: larger;">{{item.title}}</a>
+        {% empty %}
+            <p>You have no items in your watchlist</p>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -9,6 +9,11 @@
 
 
 {% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
     {% if item %}
     <div class="container-fluid border-bottom">
         <div class="row">
@@ -19,11 +24,11 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="col-md-auto">
-                <button class="btn btn-default" data-toggle="button">
+                <button class="btn btn-default" data-toggle="button" name="watch" value="True">
                     {% if watched %}
-                <img src="{{watch_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
+                <img src="{{watched_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
                     {% else %}
-                    <img src="{{watched_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
+                    <img src="{{watch_url}}" id="watch" style="width:30px;height:auto;" onclick="this.src = this.src == offImg ? onImg : offImg;">
                     {% endif %}
                 </button>
             </div>
@@ -63,13 +68,21 @@
     </div>
     <h2>Comments</h2>
     {% if comments %}
+        {% for comment in comments %}
+            <p>{{comment.message}} {{comment.enter_time}}   </p>
+        {% endfor %}
+    {% else %}
+        <h3>No comments so far.</h3>
     {% endif %}
     {% if request.user.is_authenticated %}
+    <form action="" method="post">
+        {% csrf_token %}
     <div class="form-group w-50">
         <label for="comment">Add comment</label>
-        <textarea class="form-control mb-3" id="comment" rows="3"></textarea>
-        <input type="submit" class="btn btn-primary">
+        <textarea class="form-control mb-3" id="comment" name="comment" rows="3"></textarea>
+        <input type="submit" class="btn btn-primary" value="Send Comment">
       </div>
+    </form>
     {% endif %}
     {% else %}
         <h2> There are currently no items available</h2>
