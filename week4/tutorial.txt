@@ -1,0 +1,3 @@
+# Single Page Applications
+dynamically loading pages with js. Using fetch.
+js can also change url and push entry to history.
