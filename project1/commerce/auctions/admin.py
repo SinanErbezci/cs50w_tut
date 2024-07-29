@@ -6,3 +6,4 @@ from .models import Auctions,User,Bids,Comments
 admin.site.register(Auctions)
 admin.site.register(Bids)
 admin.site.register(Comments)
+admin.site.register(User)

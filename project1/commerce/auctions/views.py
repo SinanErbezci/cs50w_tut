@@ -13,7 +13,6 @@ from django.templatetags.static import static
 def index(request):
     items = Auctions.objects.filter(active=True)
     img_url = static('auctions/card-image.svg')
-    print(img_url)
     return render(request, "auctions/index.html", {
             "items":items,
             "img_url":img_url   
@@ -145,7 +144,7 @@ def listing(request,item_id):
             return redirect("listing", item_id=item_id)
     
     item = Auctions.objects.get(pk = item_id)
-    comments = Comments.objects.all().filter(item=item).order_by("enter_time")
+    comments = Comments.objects.all().select_related("user").filter(item=item).order_by("enter_time")
     if item.watchlist.filter(pk=request.user.id):
         watched = True
     else:

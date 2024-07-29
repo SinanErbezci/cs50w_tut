@@ -1,5 +1,9 @@
 {% extends "auctions/layout.html" %}
 
+{% block title %}
+    {{item.title}} | {{item.id}}
+{% endblock %}
+
 {% block script %}
     <script>
         var offImg = "{{watch_url}}"
@@ -35,6 +39,11 @@
             </form>
             {% endif %}
             <div class="col-6 align-self-center">
+            {% if item.active %}
+                <span class="badge bg-primary " style="font-size: x-large;color: white;">Active</span>
+            {% else %}
+                <span class="badge bg-secondary " style="font-size: x-large;color: white;">Inactive</span>
+            {% endif %}
             <h3>Name: {{item.title}} </h2>
             <h3>Category: {{item.category}}</h2>
             {% if item.description %}
@@ -69,7 +78,12 @@
     <h2>Comments</h2>
     {% if comments %}
         {% for comment in comments %}
-            <p>{{comment.message}} {{comment.enter_time}}   </p>
+            <div class="card w-75">
+                <div class="card-body">
+                    <p>{{comment.message}}</p>
+                    <p class="card-text"><strong>{{comment.user.username}}</strong> <small class="text-muted">  {{comment.enter_time}}</small></p>
+                </div>
+            </div>
         {% endfor %}
     {% else %}
         <h3>No comments so far.</h3>
