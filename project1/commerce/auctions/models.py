@@ -23,7 +23,9 @@ class Auctions(models.Model):
     category = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=ELSE)
     active = models.BooleanField(default=True)
     created_time = models.DateTimeField(auto_now_add=True)
-    watchlist = models.ManyToManyField(User, related_name="watchlist")
+    watchlist = models.ManyToManyField(User, related_name="watchlist", blank=True)
+    owner = models.ForeignKey(User, related_name="owner", on_delete=models.SET_NULL, null=True)
+    buyer = models.ForeignKey(User, default="", blank=True, on_delete=models.SET_NULL, null=True)
     
 class Comments(models.Model):
     message = models.CharField(max_length=256)

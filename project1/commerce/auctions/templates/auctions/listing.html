@@ -24,7 +24,7 @@
             <div class="col-md-auto">
                 <img src="{{item.image}}" class="img-fluid" alt="W3Schools.com" onerror="this.onerror=null;this.src='{{img_url}}';" style="width:240px;height:auto;">
             </div>
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and item.active %}
             <form method="post">
                 {% csrf_token %}
                 <div class="col-md-auto">
@@ -57,14 +57,26 @@
     <div class="container-fluid mt-2">
         <div class="row">
                 <div class="col">
+                    {% if max_bid and item.active %}
                     <p>Total Current bid(s) <strong>{{bid_count}}</strong> </p>
                     <p>Current Max Bid is <strong>{{max_bid}}</strong></p>
+                    {% elif item.active %}
+                    <p>There are currently no bids have been made.</p>
+                    {% else %}
+                        <h3>Item is sold for {{max_bid}}</h3>
+                    {% if item.buyer.pk == request.user.id %}
+                        <h3>Congrats. You've bought the item.</h3>
+                    {% endif %}
+                    {% endif %}
                 </div>
         </div>
-    {% if request.user.is_authenticated %}
         <div class="row">
             <div class="col">
-            <p>Your Max Bid is <strong>{{user_bid}}</strong></p>
+    {% if item.active %}
+    {% if request.user.is_authenticated and not owner %}
+                {% if user_bid %}
+                <p>Your Max Bid is <strong>{{user_bid}}</strong></p>
+                {% endif %}
             <label for="bid">Bid for item</label>   
             <form action="" method="post">
                 {% csrf_token %}
@@ -78,23 +90,43 @@
                 </div>
             </div>
             </form>
+    {% else %}
+            {% if max_bid %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="submit"  name="close" class="btn btn-primary" value="Close the Bid"></button>
+            </form>
+            {% else %}
+            <span class="badge bg-secondary " style="font-size: large;color: white;">You can't close the bid.</span>
+            {% endif %}
+     {% endif %}
+     {% endif %}
             </div>
         </div>
-    {% endif %}
     </div>
-    <h2>Comments</h2>
+    <div class="container-fluid mt-2">
+        <div class="row">
+            <div class="col">
+                <h2>Comments</h2>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col">
     {% if comments %}
         {% for comment in comments %}
-            <div class="card w-75">
-                <div class="card-body">
-                    <p>{{comment.message}}</p>
-                    <p class="card-text"><strong>{{comment.user.username}}</strong> <small class="text-muted">  {{comment.enter_time}}</small></p>
-                </div>
-            </div>
+                <div class="card w-75">
+                    <div class="card-body">
+                        <p>{{comment.message}}</p>
+                        <p class="card-text"><strong>{{comment.user.username}}</strong> <small class="text-muted">  {{comment.enter_time}}</small></p>
+                    </div>
+                </div>          
+
         {% endfor %}
     {% else %}
         <h3>No comments so far.</h3>
     {% endif %}
+    </div>
+        </div>
     {% if request.user.is_authenticated %}
     <form action="" method="post">
         {% csrf_token %}
@@ -105,6 +137,7 @@
       </div>
     </form>
     {% endif %}
+    </div>
     {% else %}
         <h2> There are currently no items available</h2>
     {% endif %}

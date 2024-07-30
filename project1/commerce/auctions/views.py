@@ -78,6 +78,7 @@ def create_listing(request):
 
     category_dict = Auctions.CATEGORY_CHOICES
     error = ""
+    user = User.objects.get(pk=request.user.id)
 
     if request.method == "POST":
         title = request.POST.get("title", "")
@@ -111,7 +112,7 @@ def create_listing(request):
             messages.success(request, "You've successfully created a listing")
             price = int(price1) + (int(price2)/100.0)
             new_item = Auctions.objects.create(
-                description=desc, category=category, image=url, price=price, title=title
+                description=desc, category=category, image=url, price=price, title=title, owner=user
                 )
             new_item.save()
             return redirect("index")
@@ -143,17 +144,24 @@ def listing(request,item_id):
             new_item.save()
             messages.success(request, "You've successfully commented")
         elif request.POST.get("bid",""):
-            print(request.POST.get("bid"))
-            item = Auctions.objects.get(pk=item_id)
-            max_bid = float(Bids.objects.filter(item=item).order_by("-bid")[0].bid)
+            max_bid = Bids.objects.filter(item=item).order_by("-bid")
+            if not max_bid:
+                max_bid = float(item.price)
+            else:
+                max_bid = float(max_bid[0].bid)
             user_bid = float(request.POST["bid"])
+
             if user_bid < max_bid:
-                messages.warning(request, "Please bid higher than max bid")
+                messages.warning(request, "Please bid higher than max bid or initial price")
             else:
                 new_bid = Bids.objects.create(
                     bid=user_bid, user=user, item=item
                 )
                 new_bid.save()
+        elif request.POST.get("close",""):
+            item.active = False
+            item.buyer = user
+            item.save()
             
         return redirect("listing", item_id=item_id)
 
@@ -161,17 +169,31 @@ def listing(request,item_id):
     item = Auctions.objects.get(pk = item_id)
     comments = Comments.objects.all().select_related("user").filter(item=item).order_by("enter_time")
     bids = Bids.objects.all().filter(item=item).order_by("-bid")
-    if request.user.is_authenticated:
-        user_bid = bids.filter(user=request.user)[0].bid
-    else:
+    if not bids:
         user_bid = ""
-    max_bid = bids[0].bid
-    bid_count = bids.count()
+        max_bid = ""
+        bid_count = 0
+    else:
+        if request.user.is_authenticated:
+            user_bid = bids.filter(user=request.user)
+            if not user_bid:
+                user_bid = ""
+            else:
+                user_bid = user_bid[0].bid
+        
+        max_bid = bids[0].bid
+        bid_count = bids.count()
 
     if item.watchlist.filter(pk=request.user.id):
         watched = True
     else:
         watched = False
+
+    if item.owner.pk == request.user.id:
+        owner = True
+    else:
+        owner = False
+
     img_url = static('auctions/card-image.svg')
     watch_url = static('auctions/add.svg')
     watched_url = static('auctions/add_fill.svg')
@@ -185,7 +207,8 @@ def listing(request,item_id):
             "comments": comments,
             "user_bid": user_bid,
             "max_bid": max_bid,
-            "bid_count": bid_count
+            "bid_count": bid_count,
+            "owner": owner
         })
     else:
         messages.warning(request, "Item is not active or not found")
