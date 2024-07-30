@@ -5,10 +5,11 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from .models import User, Auctions, Comments
+from .models import User, Auctions, Comments, Bids
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
+import decimal
 
 def index(request):
     items = Auctions.objects.filter(active=True)
@@ -122,6 +123,8 @@ def create_listing(request):
 
 def listing(request,item_id):
     if request.method == "POST":
+        user = User.objects.get(pk=request.user.id)
+        item = Auctions.objects.get(pk=item_id)
         if request.POST.get("watch",""):
             item = Auctions.objects.get(pk = item_id)
             if ( item.watchlist.filter(pk=request.user.id)):
@@ -132,19 +135,39 @@ def listing(request,item_id):
                 item.watchlist.set([request.user.id]) 
                 item.save()
                 messages.success(request, "You've successfully added to your watchlist")
-            return redirect("listing", item_id=item_id)
+        
         elif request.POST.get("comment",""):
-            user = User.objects.get(pk=request.user.id)
-            item = Auctions.objects.get(pk=item_id)
             new_item = Comments.objects.create(
                 message=request.POST["comment"], user=user, item=item
             )
             new_item.save()
             messages.success(request, "You've successfully commented")
-            return redirect("listing", item_id=item_id)
-    
+        elif request.POST.get("bid",""):
+            print(request.POST.get("bid"))
+            item = Auctions.objects.get(pk=item_id)
+            max_bid = float(Bids.objects.filter(item=item).order_by("-bid")[0].bid)
+            user_bid = float(request.POST["bid"])
+            if user_bid < max_bid:
+                messages.warning(request, "Please bid higher than max bid")
+            else:
+                new_bid = Bids.objects.create(
+                    bid=user_bid, user=user, item=item
+                )
+                new_bid.save()
+            
+        return redirect("listing", item_id=item_id)
+
+
     item = Auctions.objects.get(pk = item_id)
     comments = Comments.objects.all().select_related("user").filter(item=item).order_by("enter_time")
+    bids = Bids.objects.all().filter(item=item).order_by("-bid")
+    if request.user.is_authenticated:
+        user_bid = bids.filter(user=request.user)[0].bid
+    else:
+        user_bid = ""
+    max_bid = bids[0].bid
+    bid_count = bids.count()
+
     if item.watchlist.filter(pk=request.user.id):
         watched = True
     else:
@@ -159,7 +182,10 @@ def listing(request,item_id):
             "watch_url":watch_url,
             "watched_url":watched_url,
             "watched":watched,
-            "comments": comments
+            "comments": comments,
+            "user_bid": user_bid,
+            "max_bid": max_bid,
+            "bid_count": bid_count
         })
     else:
         messages.warning(request, "Item is not active or not found")
