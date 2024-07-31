@@ -9,7 +9,7 @@ from .models import User, Auctions, Comments, Bids
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
-import decimal
+
 
 def index(request):
     items = Auctions.objects.filter(active=True)
@@ -94,10 +94,8 @@ def create_listing(request):
             except ValidationError as e:
                 error = e.message
 
-        if not desc:
-            error = "Please Enter description"
-        elif not category:
-            error = "Please Select category"
+        if not category:
+            category = "EL"   
         elif not price1 or not price1.isdigit():
             error = "Please Enter Price"
         elif not title:
@@ -160,7 +158,8 @@ def listing(request,item_id):
                 new_bid.save()
         elif request.POST.get("close",""):
             item.active = False
-            item.buyer = user
+            buyer = Bids.objects.order_by("-bid").filter(item=item)[0].user
+            item.buyer = buyer
             item.save()
             
         return redirect("listing", item_id=item_id)
@@ -169,9 +168,9 @@ def listing(request,item_id):
     item = Auctions.objects.get(pk = item_id)
     comments = Comments.objects.all().select_related("user").filter(item=item).order_by("enter_time")
     bids = Bids.objects.all().filter(item=item).order_by("-bid")
+    user_bid = watched = ""
+
     if not bids:
-        user_bid = ""
-        max_bid = ""
         bid_count = 0
     else:
         if request.user.is_authenticated:

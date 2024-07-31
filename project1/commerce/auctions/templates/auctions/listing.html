@@ -91,13 +91,15 @@
             </div>
             </form>
     {% else %}
-            {% if max_bid %}
+            {% if owner %}
+            {% if max_bid%}
             <form action="" method="post">
                 {% csrf_token %}
                 <input type="submit"  name="close" class="btn btn-primary" value="Close the Bid"></button>
             </form>
             {% else %}
             <span class="badge bg-secondary " style="font-size: large;color: white;">You can't close the bid.</span>
+            {% endif %}
             {% endif %}
      {% endif %}
      {% endif %}
