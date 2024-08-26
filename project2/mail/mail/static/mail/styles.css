@@ -1,3 +1,97 @@
+*  {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 textarea {
     min-height: 400px;
+}
+
+button {
+    background-color: hsl(180, 91%, 52%);
+    border-radius: 15px;
+    text-align: center;
+    padding: 0.5em 1em;
+    margin: 0;
+    font-weight: bolder;
+}
+
+button:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+button:active {
+    opacity: 0.6;
+}
+
+h3 {
+    margin: 0.5em 0;
+}
+
+.emails-container {
+    display: flex;
+    border: 2px solid black;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none;
+
+}
+
+.emails-container:nth-child(2)  {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+
+}
+.emails-container:last-child {
+    border-bottom: 2px solid black;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.time, .sender, .topic {
+    margin: 0;
+    padding: 0.2em 0.5em;
+}
+
+
+.sender {
+    font-weight: bolder;
+}
+
+.emails-container:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+
+.read {
+    background-color: gray;
+}
+
+.mail-info {
+    border-bottom: 1px solid gray;
+    padding-bottom: 2rem;
+}
+
+.from, .to, .subject, .timestamp {
+    margin: 0;
+    font-weight: bolder;
+}
+
+span {
+    font-weight:normal;
+}
+
+.mail-body {
+    padding-top: 2rem;
+}
+
+.bold {
+    font-weight: bolder;
+}
+
+
+
+.read {
+    background-color: rgb(192, 192, 192);
 }
