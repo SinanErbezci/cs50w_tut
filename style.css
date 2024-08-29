@@ -1,0 +1,319 @@
+    @import url('https://fonts.googleapis.com/css2?family=Fugaz+One&family=Nunito&display=swap');
+
+/* Reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+button, input, textarea {
+    font: inherit;
+}
+
+/* Variables */
+:root {
+    /* Fonts */
+    --FF: 'Nunito', sans-serif;
+    --FF-HEADING: 'Fugaz One', cursive;
+    --FS: clamp(1rem, 2.2vh , 1.5rem);
+    /* clamp makes font size responsive */
+
+    /* Colors */
+    --BGCOLOR: orange;
+    --BGCOLOR-FADE: rgb(252,220,160);
+    --BGIMAGE: linear-gradient(to bottom, var(--BGCOLOR), var(--BGCOLOR-FADE));
+    --BODY-BGCOLOR: white;
+    --FONT-COLOR: black;
+    --BORDER-COLOR: #333;
+    --BORDER: 3px solid var(--BORDER-COLOR);
+    --HIGHLIGHT-COLOR: rgb(51,178,51);
+    --LINK-COLOR: black;
+    --LINK-ACTIVE: orange;
+    --LINK-HOVER: hsla(0, 0%, 0%, 0.6);
+    --HEADER-COLOR: white;
+    --HEADER-BGCOLOR: black;
+    --NAV-COLOR: #FFF;
+    --HERO-BGCOLOR: rgba(51,178,51, 0.75);
+    --HERO-COLOR: white;
+
+    /* Standard Padding */
+    --PADDING-TB: 0.25em;
+    --PADDING-SIDE: 2.5%;
+
+    /* BORDERS */
+    --BORDERS: 1px solid var(--BORDER-COLOR);
+    --BORDER-RADIUS: 15px;
+
+    /* Standard Margin */
+    --MARGIN: clamp(1em, 2.5vh, 1.5em);
+}
+
+/* Utility Classes */
+.offscreen {
+    position: absolute;
+    left: -10000px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.center {
+    text-align: center;
+}
+
+/* General Styles */
+html {
+    scroll-behavior: smooth;
+    font-size: var(--FS);
+    font-family: var(--FF);
+    background-color: var(--BGCOLOR);
+    background-image: var(--BGIMAGE);
+}
+
+body {
+    background-color: var(--BODY-BGCOLOR);
+    color: var(--FONT-COLOR);
+    min-height: 100vh;
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: var(--BORDER);
+    border-right: var(--BORDER);
+    box-shadow: 0 0 10px var(--BORDER-COLOR);
+}
+
+h1,h2,h3 {
+    font-family: var(--FF-HEADING);
+    letter-spacing: 0.1em;
+}
+
+h2,h3 {
+    margin-bottom: 1em;
+    color: var(--HIGHLIGHT-COLOR);
+}
+
+p {
+    line-height: 1.5;
+}
+
+a:any-link {
+    color: var(--LINK-COLOR);
+}
+
+a:hover, a:focus-visible {
+    color: var(--LINK-HOVER);
+}
+
+a:active {
+    color: var(--LINK-ACTIVE);
+}
+
+/* Header */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.header__h1 {
+    background-color: var(--HEADER-BGCOLOR);
+    color: var(--HEADER-COLOR);
+    padding: var(--PADDING-TB) var(--PADDING-SIDE);
+    text-align:center;
+}
+
+.header__nav {
+    background-color: var(--NAV-BGCOLOR);
+    border-bottom: var(--BORDER);
+    font-weight: bold;
+    box-shadow: 0 6px 5px -5px var(--BORDER-COLOR);   
+}
+
+.header__ul {
+    padding: var(--PADDING-TB) var(--PADDING-SIDE);
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    gap: 1rem;
+}
+
+.hero {
+    position: relative;
+}
+
+.hero__h2 {
+    background-color: var(--HERO-BGCOLOR);
+    color: var(--HERO-COLOR);
+    padding: 0.25em 0.35em;
+    text-shadow: 2px 2px 5px var(--BORDER-COLOR);
+    position:absolute;
+    top: -100px;
+    left: 20px;
+    animation: showWelcome 1s ease-in-out 1s forwards;
+}
+
+@keyframes showWelcome {
+    0% {
+        top: -20px;
+        transform: scaleY(0.2);
+    }
+
+    80% {
+        top: 40px;
+        transform: scaleY(1.2);
+    }
+
+    100% {
+        top: 20px;
+        transform: scaleY(1);
+    }
+}
+
+/* Footer */
+.footer {
+    position: sticky;
+    bottom: 0;
+    background-color: var(--HEADER-BGCOLOR);
+    color: var(--HEADER-COLOR);
+    text-align: center;
+    padding: var(--PADDING-TB) var(--PADDING-SIDE);
+}
+
+/* Main */
+.main {
+    padding: var(--PADDING-TB) var(--PADDING-SIDE);
+}
+
+.main__article {
+    scroll-margin-top: 6.5rem;
+    margin: var(--MARGIN);
+}
+
+.main__article:first-child {
+    margin-top: 1em;
+}
+
+.main__article:last-child {
+    min-height: calc(100vh - 20rem);
+}
+
+/* Trivia */
+
+.about__trivia {
+    margin: var(--MARGIN);
+}
+
+.about__trivia-answer {
+    margin-top: 1em;
+}
+
+/* Contact */
+
+.contact__h2 {
+    margin: 0;
+}
+
+.contact__fieldset {
+    border: none;
+}
+
+.contact__label, .contact__input {
+    display: block;
+    margin: 0.5em;
+    font-weight: bolder;
+}
+
+.contact__input, .contact__textarea {
+    width: 100%;
+    padding: 0.5em;
+    border-radius: var(--BORDER-RADIUS);
+    border-width: 1.5px
+}
+
+.contact__textarea {
+    margin-top: 0;
+}
+
+.contact__button {
+    background-color: var(--HIGHLIGHT-COLOR);
+    color: white;
+    border-radius: var(--BORDER-RADIUS);
+    padding: 0.5em;
+    margin-left: 0.5em;
+}
+
+/* Dont create tables with div elements! */
+/* display: contents -> causes element's children to appear as if they were 
+direct children of the element's parents. */
+
+/* Menu */
+thead, tbody, tfoot, tr {
+    display: contents;
+}
+
+.menu__container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: 
+        "hd1 hd2 hd3"
+        "cr cr1 cr1p"
+        "cr cr2 cr2p"
+        "cr cr3 cr3p"
+        "sf sf1 sf1p"
+        "sf sf2 sf2p"
+        "sf sf3 sf3p"
+        "cs cs cs";
+    margin: 0.1em;
+    margin-bottom: 1em;
+}
+
+.menu__cr {
+    grid-area: cr;
+}
+
+.menu__sf {
+    grid-area: sf;
+}
+
+.menu__cs {
+    grid-area: cs;
+}
+
+.menu__cr, .menu__sf, .menu__cs {
+    font-weight: bold;
+    color: var(--HIGHLIGHT-COLOR);
+    height: 100%;
+    display: grid;
+    place-content: center;
+}
+
+.menu__header {
+    font-weight: bolder;
+}
+.menu__header, .menu__item {
+    border: medium ridge var(--BORDER-COLOR);
+    width: 100%;
+    padding: 1em;
+
+}
+
+.menu__item {
+    display: grid;
+    place-content: center;
+}
+
+thead th:first-child {
+    border-top-left-radius: 15px;
+}
+
+tfoot td {
+    border-bottom-left-radius: 15px;
+}

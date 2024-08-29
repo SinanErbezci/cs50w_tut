@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+}
+
+main {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+main h2 {
+    margin-top: 0.5em;
+}
+.create-post {
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 1em 2.5%;
+    margin-top: clamp(1em, 2.5vh, 1.5em);
+}
+
+.sub-button {
+    margin-top: 1em; 
+}
+
+#content::placeholder {
+    text-align: right;
+    transform: translateY(200%);
+}
+
+.post {
+    border: 1px solid gray;
+    border-radius: 15px;    
+    margin-top: clamp(1em, 2.5vh, 1.5em);
+    padding: 1em 2.5%
+}
+
+footer {
+    margin-top: 1em;
+}
