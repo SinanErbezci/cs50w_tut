@@ -10,3 +10,7 @@ class Post(models.Model):
     like = models.PositiveIntegerField(default=0)
     owner = models.ForeignKey(User, related_name="owner", on_delete=models.CASCADE)
     time = models.DateTimeField(auto_now_add=True)
+
+class Follow(models.Model):
+    follower = models.ManyToManyField(User,related_name="follower" )
+    following = models.ManyToManyField(User,related_name="following")

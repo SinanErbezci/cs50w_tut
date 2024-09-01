@@ -1,11 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import User,Post
+from .models import User,Post, Follow
 
 
 def index(request):
@@ -75,10 +77,34 @@ def register(request):
         return render(request, "network/register.html")
 
 
-@login_required
-def profile(request):
-    pass
+def profile(request, username):
+    profile = User.objects.get(username=username)
+    posts = Post.objects.all().filter(owner=profile).order_by("-time")
+    out = {"posts" : posts, "username":username}
+    if request.user.is_authenticated and (profile.id != request.user.id):
+        user  = User.objects.get(pk=request.user.id)
+        try: 
+            Follow.objects.get(follower=user, following=profile)
+            follow = True
+        except:
+            follow = False
+        out["follow"] = follow
+
+    return render(request, "network/profile.html", out)
 
 @login_required
-def follow(request):
-    pass
+@csrf_exempt
+def follow(request, username):
+    if request.method == "POST":
+        follower = User.objects.get(pk = request.user.id)
+        following = User.objects.get(username = username)
+        try:
+            follow = Follow.objects.get(follower=follower, following=following)
+            follow.remove()
+            messages.success(request, f"You've unfollowed {following}")
+        except:
+            follow = Follow.objects.create(follower=follower, following=following)
+            follow.save()
+            messages.success(request, f"You've followed {following}")
+
+    return redirect("index")
