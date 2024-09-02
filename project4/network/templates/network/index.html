@@ -3,6 +3,7 @@
 {% block body %}
     <main>
         <h2>All Posts</h2>
+        {% if request.user.is_authenticated %}
         <div class="create-post">
             <form action="" method="post">
                 {% csrf_token %}
@@ -11,6 +12,7 @@
                 <input class="btn btn-primary sub-button" type="submit"  value="Post">
             </form>
         </div>
+        {% endif %}
         {% for item in page_obj %}
         <div class="post">
         <p>{{ item.content }}</p>

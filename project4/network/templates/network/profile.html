@@ -4,13 +4,11 @@
 <main>
     <h2 id="profile-name">{{username}}'s Profile</h2>
 
-    {% if user.is_authenticated %}
-        {% if username != user.username %}
-            {% if follow %}
-            <button data-username="{{username}}" id="follow-button">Follow</button>
-            {% else %}
-            <button data-username="{{username}}" id="follow-button">Unfollow</button>
-            {% endif %}
+    {% if button %}
+        {% if follow %}
+            <button data-id="{{username}}" id="follow-button">Unfollow</button>
+        {% else %}
+            <button data-id="{{username}}" id="follow-button">Follow</button>
         {% endif %}
     {% endif %}
 

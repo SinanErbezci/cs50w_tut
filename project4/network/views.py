@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import User,Post, Follow
+import json
 
 
 def index(request):
@@ -78,33 +79,41 @@ def register(request):
 
 
 def profile(request, username):
-    profile = User.objects.get(username=username)
-    posts = Post.objects.all().filter(owner=profile).order_by("-time")
+    user = User.objects.get(username=username)
+    posts = Post.objects.all().filter(owner=user).order_by("-time")
     out = {"posts" : posts, "username":username}
-    if request.user.is_authenticated and (profile.id != request.user.id):
-        user  = User.objects.get(pk=request.user.id)
+
+    if (not request.user.is_authenticated) or (username == request.user.username):
+        out["button"] = False
+    else:
+        follower  = User.objects.get(pk = request.user.id)
         try: 
-            Follow.objects.get(follower=user, following=profile)
+            Follow.objects.get(follower = follower, following=user)
+            print("yes")
             follow = True
         except:
+            print("no")
             follow = False
         out["follow"] = follow
+        out["button"] = True
 
     return render(request, "network/profile.html", out)
 
+
+
+# API
 @login_required
 @csrf_exempt
 def follow(request, username):
     if request.method == "POST":
-        follower = User.objects.get(pk = request.user.id)
-        following = User.objects.get(username = username)
-        try:
-            follow = Follow.objects.get(follower=follower, following=following)
-            follow.remove()
-            messages.success(request, f"You've unfollowed {following}")
-        except:
-            follow = Follow.objects.create(follower=follower, following=following)
+        follower = User.objects.get(pk=request.user.id)
+        following = User.objects.get(username=username)
+        data = json.loads(request.body)
+        if data["text"] == "follow":
+            follow = Follow.objects.create(follower = follower, following= following)
             follow.save()
-            messages.success(request, f"You've followed {following}")
-
+        elif data["text"] == "unfollow":
+            follow = Follow.objects.get(follower = follower, following= following)
+            follow.delete()
     return redirect("index")
+
