@@ -99,7 +99,24 @@ def profile(request, username):
 
     return render(request, "network/profile.html", out)
 
+@login_required
+def following(request):
+    user = User.objects.get(pk=request.user.id)
+    following = user.follower.all()
+    
+    if len(following) == 0:
+        nofollow = True
+        page_obj = None
+    else:
+        nofollow = False
+        for follow in following:
+            out.append(Post.objects.all().filter(owner__id=follow.following.id).order_by("-time"))
 
+        paginator = Paginator(out,10)
+        page_num = request.GET.get('page')
+        page_obj = paginator.get_page(page_num)
+
+    return render(request, "network/following.html", {"page_obj":page_obj, "nofollow":nofollow})
 
 # API
 @login_required
@@ -117,3 +134,8 @@ def follow(request, username):
             follow.delete()
     return redirect("index")
 
+def like(request):
+    if request.method == "POST":
+        pass
+
+    return redirect("index")
