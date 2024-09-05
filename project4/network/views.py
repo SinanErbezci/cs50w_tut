@@ -7,7 +7,7 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from .models import User,Post, Follow
+from .models import User,Post, Follow, Like
 import json
 
 
@@ -81,7 +81,17 @@ def register(request):
 def profile(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.all().filter(owner=user).order_by("-time")
-    out = {"posts" : posts, "username":username}
+    paginator = Paginator(posts,10) 
+    page_num = request.GET.get('page')
+    page_obj = paginator.get_page(page_num)
+
+    following = len(user.follower.all())
+    follower = len(user.following.all())
+    out = {"page_obj" : page_obj, 
+    "username":username,
+    "following":following,
+    "follower":follower
+    }   
 
     if (not request.user.is_authenticated) or (username == request.user.username):
         out["button"] = False
@@ -103,22 +113,24 @@ def profile(request, username):
 def following(request):
     user = User.objects.get(pk=request.user.id)
     following = user.follower.all()
-    
+
     if len(following) == 0:
         nofollow = True
         page_obj = None
     else:
         nofollow = False
-        for follow in following:
-            out.append(Post.objects.all().filter(owner__id=follow.following.id).order_by("-time"))
+        follow = [x.following.id for x in following]
+        out = Post.objects.all().filter(owner__id__in = follow)    
 
-        paginator = Paginator(out,10)
+        paginator = Paginator(out,10) 
         page_num = request.GET.get('page')
         page_obj = paginator.get_page(page_num)
 
+        # {"page_obj":out, "nofollow":nofollow}
+
     return render(request, "network/following.html", {"page_obj":page_obj, "nofollow":nofollow})
 
-# API
+# APIs
 @login_required
 @csrf_exempt
 def follow(request, username):
@@ -134,8 +146,24 @@ def follow(request, username):
             follow.delete()
     return redirect("index")
 
-def like(request):
+@login_required
+@csrf_exempt
+def like(request, post_id):
     if request.method == "POST":
-        pass
+        user = User.objects.get(pk=request.user.id)
+        post = Post.objects.get(pk=post_id)
+        try:
+            like = Like.objects.get(liker=user, liked=post)
+            like.delete()
+            post.like -= 1
+            post.save()
+            return JsonResponse({"out":"like removed"})
+        except:
+            new_like = Like.objects.create(liker=user, liked  = post)
+            new_like.save()
+            post.like += 1
+            post.save()
+            return JsonResponse({"out":"liked"})
+
 
     return redirect("index")

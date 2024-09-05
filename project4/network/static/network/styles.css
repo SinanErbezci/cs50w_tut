@@ -11,14 +11,49 @@ body {
 button {
     font-family: inherit;
 }
+
+button:hover {
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}
+
 main {
     max-width: 800px;
     margin: 0 auto;
 }
 
-main h1,h2 {
+main h3 {
     margin-top: 0.5em;
 }
+
+footer {
+    margin-top: 1em;
+}
+
+.follower, .following {
+    display:inline;
+    padding: 0.5em;
+    border-radius: 15px;
+    color: white;
+    margin-inline-end: 0.5em;
+}
+
+.following {
+    background-color: #06D6A0;
+}
+
+.follower {
+    background-color: #3399FF;
+}
+
+.follow-btn, .unfollow-btn {
+    margin-left: 1em;
+    padding: 0.5em 1em;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #3399FF;
+    border-radius: 3px;
+}
+
 
 .create-post {
     border: 1px solid gray;
@@ -31,6 +66,9 @@ main h1,h2 {
     margin-top: 1em; 
 }
 
+.like-num {
+    margin-left: 0.5em;
+}
 #content::placeholder {
     text-align: right;
     transform: translateY(200%);
@@ -43,9 +81,6 @@ main h1,h2 {
     padding: 1em 2.5%
 }
 
-footer {
-    margin-top: 1em;
-}
 
 #follow-button {
     margin-left: 1em;
@@ -56,9 +91,16 @@ footer {
     border-radius: 3px;
 }
 
-#follow-button:hover {
+button:hover {
     box-shadow: 0 0 11px rgba(33,33,33,.2); 
 }
-#profile-name {
-    display:inline-block;
+
+#profile-name  {
+    display: inline-block;
+    margin: 0.5em 0;
+}
+
+.like-btn {
+    background-color: white;
+    border: none;
 }

@@ -1,14 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    const followButton = document.querySelector('#follow-button');
-    if (followButton.innerHTML === 'Follow') {
-        followButton.style.backgroundColor = "white";
+    let followBtn = document.querySelector('#follow-button');
+    if (typeof maybeObject != "undefined") {
+        document.querySelector('#follow-button').addEventListener('click', follow);
     }
-    else {
-        followButton.style.backgroundColor = "#3399FF";
-        followButton.style.color = "#FFF";
-    }
-    followButton.addEventListener('click', follow);
+
+    let likeBtns = document.querySelectorAll('.like-btn');
+    if (typeof likeBtns != "undefined") {
+    likeBtns.forEach((button) => {
+        button.onclick = like;
+    });}
 
   });
 
@@ -48,3 +49,20 @@ function follow() {
         this.style.color = "#000";
       }
     } 
+
+function like() {
+    const id = this.dataset.id;
+    fetch(`/like/${id}`, {
+        method: "POST"})
+    .then(response => response.json())
+    .then(out => {
+        if (out.out == "liked") {
+            let parent = this.parentElement;
+            parent.lastChild.innerHTML = parseInt(parent.lastChild.innerHTML) + 1;
+        }
+        else {
+            let parent = this.parentElement;
+            parent.lastChild.innerHTML = parseInt(parent.lastChild.innerHTML) + -1;
+        }
+    })
+}
