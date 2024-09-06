@@ -5,11 +5,17 @@ document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('#follow-button').addEventListener('click', follow);
     }
 
-    let likeBtns = document.querySelectorAll('.like-btn');
+    let likeBtns = document.querySelectorAll('#like-btn');
     if (typeof likeBtns != "undefined") {
     likeBtns.forEach((button) => {
         button.onclick = like;
     });}
+
+    let editBtns = document.querySelectorAll('#edit-btn');
+    if (typeof editBtns != "undefined") {
+        editBtns.forEach((button) => {
+            button.onclick = edit;
+        });}
 
   });
 
@@ -65,4 +71,11 @@ function like() {
             parent.lastChild.innerHTML = parseInt(parent.lastChild.innerHTML) + -1;
         }
     })
+}
+
+function edit() {
+    let postDiv = this.parentElement;
+    let content = postDiv.children[2].innerHTML;
+    
+    
 }
