@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import User,Post, Follow, Like
@@ -165,5 +165,26 @@ def like(request, post_id):
             post.save()
             return JsonResponse({"out":"liked"})
 
+
+    return redirect("index")
+
+@login_required
+@csrf_exempt
+def edit(request, post_id):
+    if request.method == "PATCH":
+        post = Post.objects.get(pk=post_id)
+        if (request.user.id == post.owner.id):
+            data = json.loads(request.body)
+            if data.get("content") is not None:
+                content = data["content"]
+                if content:
+                    post.content = content
+                    post.save()
+                    return JsonResponse({"success":"yes"})
+                else:
+                    return JsonResponse({"success":"no"})
+
+        else:
+            return HttpResponseForbidden("<h1>You've been a bad boy</h1>")
 
     return redirect("index")
