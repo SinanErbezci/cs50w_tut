@@ -15,17 +15,11 @@
         {% endif %}
         {% for item in page_obj %}
         <div class="post">
-        <p class="username">{{ item.owner.username }}</p>
-        {% if item.owner.username == request.user.username %}
-        <button class="btn btn-link edit-btn" id="edit-btn">Edit</button>
-        {% endif %}
-        <p id="content">{{ item.content }}</p>
-        {% if request.user.is_authenticated %}
-        <p><button data-id={{item.id}} class="like-btn" id="like-btn">&#x2764;</button><span class="like-num">{{item.like}}</span></p>
-        {% else %}
-        <p>&#x2764;<span class="like-num">{{item.like}}</span></p>
-        {% endif %}
-        <p class="time">{{ item.time }}</p>
+        <p>{{ item.content }}</p>
+        <p>{{ item.owner.username }}</p>
+        <p><button data-id={{item.id}} class="like-btn">&#x2764;</button><span class="like-num">{{item.like}}</span></p>
+        
+        <p>{{ item.time }}</p>
         </div>
         {% endfor %}
     </main>
