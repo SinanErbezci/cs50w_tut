@@ -9,6 +9,7 @@ from .models import User, Auctions, Comments, Bids
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.templatetags.static import static
+from decimal import Decimal
 
 
 def index(request):
@@ -110,7 +111,7 @@ def create_listing(request):
             messages.success(request, "You've successfully created a listing")
             price = int(price1) + (int(price2)/100.0)
             new_item = Auctions.objects.create(
-                description=desc, category=category, image=url, price=price, title=title, owner=user
+                description=desc, category=category, image=url, initial_price=price, price=price, title=title, owner=user
                 )
             new_item.save()
             return redirect("index")
@@ -148,14 +149,17 @@ def listing(request,item_id):
             else:
                 max_bid = float(max_bid[0].bid)
             user_bid = float(request.POST["bid"])
+            user_bid_dec = Decimal(user_bid).quantize(Decimal("1.00"))
 
             if user_bid < max_bid:
                 messages.warning(request, "Please bid higher than max bid or initial price")
             else:
                 new_bid = Bids.objects.create(
-                    bid=user_bid, user=user, item=item
+                    bid=user_bid_dec, user=user, item=item
                 )
                 new_bid.save()
+                item.price = user_bid_dec
+                item.save()
         elif request.POST.get("close",""):
             item.active = False
             buyer = Bids.objects.order_by("-bid").filter(item=item)[0].user
@@ -172,6 +176,7 @@ def listing(request,item_id):
 
     if not bids:
         bid_count = 0
+        max_bid = ""
     else:
         if request.user.is_authenticated:
             user_bid = bids.filter(user=request.user)
