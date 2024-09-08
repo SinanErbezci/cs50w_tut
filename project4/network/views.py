@@ -99,10 +99,8 @@ def profile(request, username):
         follower  = User.objects.get(pk = request.user.id)
         try: 
             Follow.objects.get(follower = follower, following=user)
-            print("yes")
             follow = True
         except:
-            print("no")
             follow = False
         out["follow"] = follow
         out["button"] = True

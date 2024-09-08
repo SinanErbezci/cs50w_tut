@@ -1,18 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     let followBtn = document.querySelector('#follow-button');
-    if (typeof maybeObject != "undefined") {
+
+    if ( followBtn != null) {
         document.querySelector('#follow-button').addEventListener('click', follow);
     }
 
     let likeBtns = document.querySelectorAll('#like-btn');
-    if (typeof likeBtns != "undefined") {
+    if (likeBtns != null) {
     likeBtns.forEach((button) => {
         button.onclick = like;
     });}
 
     let editBtns = document.querySelectorAll('#edit-btn');
-    if (typeof editBtns != "undefined") {
+    if (editBtns != null) {
         editBtns.forEach((button) => {
             button.onclick = edit;
         });}
@@ -31,10 +32,6 @@ function follow() {
                 text: 'follow'
               })
         })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-        });
         this.animate({backgroundColor: "#3399FF"}, {duration:500, fill:"forwards"});
         this.innerHTML = "Unfollow";
         this.style.color = "#FFF";
@@ -46,10 +43,6 @@ function follow() {
                 text: 'unfollow'
               })
         })
-        .then(response => response.json())
-        .then(result => {
-            console.log(result);
-        });
         this.animate({backgroundColor: "#FFF"}, {duration:500, fill:"forwards"});
         this.innerHTML = "Follow";
         this.style.color = "#000";

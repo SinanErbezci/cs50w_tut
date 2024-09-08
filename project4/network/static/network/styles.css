@@ -51,12 +51,19 @@ p {
 .follow-btn, .unfollow-btn {
     margin-left: 1em;
     padding: 0.5em 1em;
-    background-color: #ffffff;
     border: 1px solid;
     border-color: #3399FF;
     border-radius: 3px;
 }
 
+.follow-btn {
+    background-color: white;
+    color: black;
+}
+.unfollow-btn {
+    background-color: #3399FF;
+    color: white;
+}
 
 .create-post {
     border: 1px solid gray;
@@ -90,16 +97,6 @@ p {
     border-radius: 15px;    
     margin-top: clamp(1em, 2.5vh, 1.5em);
     padding: 0.5em 2.5%
-}
-
-
-#follow-button {
-    margin-left: 1em;
-    padding: 0.5em 1em;
-    background-color: #ffffff;
-    border: 1px solid;
-    border-color: #3399FF;
-    border-radius: 3px;
 }
 
 button:hover {
