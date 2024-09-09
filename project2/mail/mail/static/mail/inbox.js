@@ -136,6 +136,7 @@ function view_mail(mail_id) {
   document.querySelector('#view-mail').style.display = 'block';
   document.querySelector('#archieve').style.display = 'inline';
 
+  const title = document.querySelector('#emails-view').firstChild.innerHTML;
   const archieveBtn = document.querySelector('#archieve');
   archieveBtn.dataset.id = mail_id;
 
@@ -148,11 +149,15 @@ function view_mail(mail_id) {
     document.querySelector('#time').innerHTML = email.timestamp;
     document.querySelector('.mail-body__p').innerHTML = email.body;
 
-    if (email.archived === true) {
-      archieveBtn.innerHTML = "Unarchieve";
-    }
+    if (title != "Sent") {
+      if (email.archived === true) {
+        archieveBtn.innerHTML = "Unarchieve";
+      }
+      else {
+        archieveBtn.innerHTML = "Archieve";
+      }}
     else {
-      archieveBtn.innerHTML = "Archieve";
+      archieveBtn.style.display = "none";
     }
 
   });
