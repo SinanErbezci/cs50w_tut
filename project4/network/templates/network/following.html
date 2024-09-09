@@ -8,7 +8,7 @@
     <h1>Posts from the people that you following</h1>
     {% for post in page_obj %}
         <div class="post">
-            <p>{{post.owner}}</p>
+            <p class="username"><a href="{% url 'profile' post.owner.username %}">{{post.owner.username}}</a></p>
             <p>{{ post.content }}</p>
             <p>{{ post.time }}</p>
         </div>

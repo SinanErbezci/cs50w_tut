@@ -15,7 +15,7 @@
         {% endif %}
         {% for item in page_obj %}
         <div class="post" data-id={{item.id}}> 
-        <p class="username">{{ item.owner.username }}</p>
+        <p class="username"><a href="{% url 'profile' item.owner.username %}">{{item.owner.username}}</a></p>
         {% if item.owner.username == request.user.username %}
         <button class="btn btn-link edit-btn" id="edit-btn">Edit</button>
         {% endif %}
