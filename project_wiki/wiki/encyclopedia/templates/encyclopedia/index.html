@@ -1,0 +1,28 @@
+{% extends "encyclopedia/layout.html" %}
+
+{% block title %}
+    Encyclopedia
+{% endblock %}
+
+{% block body %}
+    {% if search %}
+        <h1>Based on your search</h1>
+        {% for entry in entries %}
+        <div class="allPages">
+            {% for entry in entries %}
+                <p><a href="{% url 'entry_page' entry %}">{{ entry }}</a></p>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <h1>All Pages</h1>
+        <div class="allPages">
+            {% for entry in entries %}
+                <p><a href="{% url 'entry_page' entry %}">{{ entry }}</a></p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+
+{% endblock %}
