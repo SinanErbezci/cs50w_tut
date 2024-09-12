@@ -5,13 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h2>Create New Page</h2>
-    <form action="{% url 'new_page' %}" method="post">
+    <h2>Edit Page of {{title}}</h2>
+    <form action="{% url 'edit_page' title %}" method="post">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="title">Title: </label>
-            <input type="text" id="title" name="title" class="form-control w-50" required value="{{title}}"></input>
-        </div>
         <div class="form-group">
             <label for="content">Content:</label>
             <textarea id="content" name="content" class="form-control w-75" rows="5" required >{{content}}</textarea>

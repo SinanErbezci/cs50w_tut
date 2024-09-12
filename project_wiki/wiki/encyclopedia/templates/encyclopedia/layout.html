@@ -15,14 +15,10 @@
                 <form>
                     <input class="search" type="text" name="q" placeholder="Search Encyclopedia">
                 </form>
-                <div>
+                <div class="sidebar-link">
                     <a href="{% url 'index' %}">Home</a>
-                </div>
-                <div>
                     <a href="{% url 'new_page' %}">Create New Page</a>
-                </div>
-                <div>
-                    Random Page
+                    <a href="{% url 'random' %}">Random Page</a>
                 </div>
                 {% block nav %}
                 {% endblock %}

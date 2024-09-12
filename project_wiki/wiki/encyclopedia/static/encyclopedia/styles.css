@@ -17,6 +17,17 @@ textarea {
     width: 80%;
 }
 
+.sidebar-link {
+    border: solid thin black;
+}
+
+.sidebar-link a {
+    display: block;
+    color:black;
+    text-align: center;
+    padding: 0.5em;
+}
+
 .main {
     padding: 10px;
 }
